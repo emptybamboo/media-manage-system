@@ -1,12 +1,24 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
+<!--    <div id="nav">-->
+<!--      <router-link to="/">Home</router-link> |-->
+<!--      <router-link to="/about">About</router-link>-->
+<!--    </div>-->
+    <main-menu></main-menu>
     <router-view/>
   </div>
 </template>
+
+<script>
+import MainMenu from "./components/main/MainMenu";
+
+export default {
+  name: 'App',
+  components: {
+    MainMenu
+  }
+}
+</script>
 
 <style>
 #app {
