@@ -1,0 +1,33 @@
+/*flex标签汇总*/
+/*flex普通容器*/
+.flex-simple{
+    display: flex;
+}
+/*flex容器标签*/
+.flex-container{
+    display: flex;
+}
+/*flex纵向排列*/
+.flex-column{
+    flex-flow : column nowrap;
+}
+/*flex侧边栏*/
+.flex-aside{
+    width: 250px;
+    background-color : #545c64
+}
+/*flex顶部栏*/
+.flex-header{
+    height: 60px;
+    background-color: #B3C0D1;
+}
+/*flex主区域*/
+.flex-main{
+    height: 100%;
+    width: 100%;
+}
+/*flex底部栏*/
+.flex-footer{
+    height: 60px;
+    background-color: #B3C0D1;
+}
