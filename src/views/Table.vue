@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import MutiTable from "@/components/main/table/MutiTable";
+import MutiTable from "@/components/main/table/BasicTable";
 
 export default {
   name: "Table",
