@@ -2,8 +2,13 @@
   <el-table
       :data="tableData"
       style="width: 100%"
+      v-loading="loading"
+      border
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(102, 153, 153, 0.2)"
       @selection-change="handleSelectionChange">
-    <slot>无数据</slot>
+    <slot></slot>
     <el-table-column label="操作">
       <template slot-scope="scope">
         <el-button
@@ -23,7 +28,8 @@ export default {
   name: "BasicTable",
   data() {
     return {
-      tableData: []
+      tableData: [],
+      loading: true,
     }
   },
   props : {
@@ -36,8 +42,11 @@ export default {
     "tableDataArr.list" : {
       handler(newVal,oldVal){
         if(newVal){
-          console.log('我接收到了表格数据！');
-          this.tableData = newVal;
+          // setTimeout(()=>{
+            console.log('我接收到了表格数据！');
+            this.tableData = newVal;
+            this.loading = false;
+          // },2000);
         }
       },
       immediate: true,

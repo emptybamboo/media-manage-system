@@ -2,3 +2,6 @@
 .padding-little{
     padding: 10px;
 }
+.overflow-auto{
+    overflow: auto;
+}

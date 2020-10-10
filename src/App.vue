@@ -1,38 +1,5 @@
 <template>
   <div id="app" class="flex-column">
-<!--    <div id="nav">-->
-<!--      <router-link to="/">Home</router-link> |-->
-<!--      <router-link to="/about">About</router-link>-->
-<!--    </div>-->
-<!--    <el-container>-->
-<!--      <el-aside>-->
-<!--          <main-menu></main-menu>-->
-<!--      </el-aside>-->
-<!--      <el-container>-->
-<!--        <el-header>Header</el-header>-->
-<!--        <el-main>-->
-<!--          Main-->
-<!--          <router-view/>-->
-<!--        </el-main>-->
-<!--      </el-container>-->
-<!--    </el-container>-->
-
-<!--    <el-container>-->
-<!--      <el-header>Header</el-header>-->
-<!--      <el-container>-->
-<!--        <el-aside width="15%">-->
-<!--          <main-menu></main-menu>-->
-<!--        </el-aside>-->
-<!--        <el-container>-->
-<!--          <el-main style="padding: 0">-->
-<!--            <router-view/>-->
-<!--          </el-main>-->
-<!--          <el-footer>Footer</el-footer>-->
-<!--        </el-container>-->
-<!--      </el-container>-->
-<!--    </el-container>-->
-
-
       <div class="flex-header">
 
       </div>
@@ -40,8 +7,23 @@
         <div class="flex-aside">
           <main-menu></main-menu>
         </div>
-        <div class="flex-main">
+        <div class="flex-main  overflow-auto">
           <router-view/>
+          <el-backtop target=".flex-main" :bottom="100" :visibility-height="20">
+            <div
+                style="{
+                  height: 100%;
+                  width: 100%;
+                  background-color: #f2f5f6;
+                  box-shadow: 0 0 6px rgba(0,0,0, .12);
+                  text-align: center;
+                  line-height: 40px;
+                  color: #1989fa;
+                }"
+            >
+              UP
+            </div>
+          </el-backtop>
         </div>
       </div>
 
@@ -66,7 +48,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   height: 100%;
   display: flex;
@@ -75,18 +56,9 @@ export default {
 html,body,.el-container,.flex-container{
   height: 100%;
 }
-/*#nav {*/
-/*  padding: 30px;*/
-/*}*/
-
-/*#nav a {*/
-/*  font-weight: bold;*/
-/*  color: #2c3e50;*/
-/*}*/
-
-/*#nav a.router-link-exact-active {*/
-/*  color: #42b983;*/
-/*}*/
+.flex-main{
+  background-color: #f0f3f4;
+}
 /*
   布局容器CSS
 */

@@ -1,66 +1,75 @@
 <template>
   <div id="staff" class="flex-column">
-    <div id="staff-button-group" class="flex-simple padding-little">
-      <el-button type="primary" @click="addDialog">新增</el-button>
-      <el-button type="danger">删除</el-button>
-    </div>
-    <basic-table
-        @table-edit="tableEdit"
-        @table-delete="tableDelete"
-        :table-data-arr="currentPageTableData"
-    >
-      <!--通过slot插入到表格组件的部分-->
-      <el-table-column
-          type="selection"
-          width="55">
-      </el-table-column>
-      <el-table-column
-          label="日期"
-      >
-        <template slot-scope="scope">
-          <i class="el-icon-time"></i>
-          <span style="margin-left: 10px">{{ scope.row.time }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-          label="姓名"
-      >
-        <template slot-scope="scope">
-          <el-popover trigger="hover" placement="top">
-            <p>姓名: {{ scope.row.name }}</p>
-            <div slot="reference" class="name-wrapper">
-              <el-tag size="medium">{{ scope.row.name }}</el-tag>
-            </div>
-          </el-popover>
-        </template>
-      </el-table-column>
-      <el-table-column
-          label="年龄"
-      >
-        <template slot-scope="scope">
-          <p>{{ scope.row.age }}</p>
-        </template>
-      </el-table-column>
-      <el-table-column
-          label="性别"
-      >
-        <template slot-scope="scope">
-          <p>{{ scope.row.gender===false?"男":"女" }}</p>
-        </template>
-      </el-table-column>
-      <el-table-column
-          label="手机号代码"
-      >
-        <template slot-scope="scope">
-          <p>{{ scope.row.phone }}</p>
-        </template>
-      </el-table-column>
-    </basic-table>
-    <complete-pagination
-        :pagination-data="paginationData"
-        @change-current-page="changeCurrentPage"
-        @change-page-size="changePageSize"
-    ></complete-pagination>
+    <el-card class="box-card"  shadow="always">
+      <div slot="header" class="clearfix">
+        <div id="staff-button-group" class="flex-simple padding-little">
+          <el-button type="primary" @click="addDialog">新增</el-button>
+          <el-button type="danger" @click="deleteAll">删除</el-button>
+        </div>
+      </div>
+      <div>
+        <basic-table
+            @table-edit="tableEdit"
+            @table-delete="tableDelete"
+            :table-data-arr="currentPageTableData"
+            ref="basicTable"
+        >
+          <!--通过slot插入到表格组件的部分-->
+          <el-table-column
+              type="selection"
+              width="55">
+          </el-table-column>
+          <el-table-column
+              label="日期"
+          >
+            <template slot-scope="scope">
+              <i class="el-icon-time"></i>
+              <span style="margin-left: 10px">{{ scope.row.time }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+              label="姓名"
+          >
+            <template slot-scope="scope">
+              <el-popover trigger="hover" placement="top">
+                <p>姓名: {{ scope.row.name }}</p>
+                <div slot="reference" class="name-wrapper">
+                  <el-tag size="medium">{{ scope.row.name }}</el-tag>
+                </div>
+              </el-popover>
+            </template>
+          </el-table-column>
+          <el-table-column
+              label="年龄"
+          >
+            <template slot-scope="scope">
+              <p>{{ scope.row.age }}</p>
+            </template>
+          </el-table-column>
+          <el-table-column
+              label="性别"
+          >
+            <template slot-scope="scope">
+              <p>{{ scope.row.gender===false?"男":"女" }}</p>
+            </template>
+          </el-table-column>
+          <el-table-column
+              label="手机号代码"
+          >
+            <template slot-scope="scope">
+              <p>{{ scope.row.phone }}</p>
+            </template>
+          </el-table-column>
+        </basic-table>
+        <complete-pagination
+            :pagination-data="paginationData"
+            @change-current-page="changeCurrentPage"
+            @change-page-size="changePageSize"
+            id="complete-pagination"
+        ></complete-pagination>
+      </div>
+    </el-card>
+
     <form-dialog :dialog-status="dialogStatus"
                  @close-dialog="cancelDialog"
                  @commit-dialog="commitDialog"
@@ -83,8 +92,10 @@
           <el-input v-model="form.age" clearable></el-input>
         </el-form-item>
         <el-form-item label="性别" :label-width="formLabelWidth">
-          <el-radio v-model="form.gender" :label="false">男</el-radio>
-          <el-radio v-model="form.gender" :label="true">女</el-radio>
+          <el-radio-group v-model="form.gender" >
+              <el-radio :label="false">男</el-radio>
+              <el-radio :label="true">女</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="手机号" :label-width="formLabelWidth">
           <el-input v-model="form.phone" clearable></el-input>
@@ -217,7 +228,21 @@ export default {
     },
     tableDelete(index,row){
       console.log("点击表格删除");
-      //this.dialogStatus.show = true;
+      this.$confirm('此操作将删除选中数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功'
+          });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     },
     //切换页码
     changeCurrentPage(page){
@@ -247,11 +272,45 @@ export default {
           (this.paginationData.currentPage-1)*this.paginationData.pageSize,
           this.paginationData.currentPage*this.paginationData.pageSize
       );//根据页码分割表格数据
+    },
+    //点击表头删除按钮显示消息提示弹框
+    deleteAll(){
+      //当前选中的所有数据,一次都没勾选的时候为undefined,勾选再取消为空数组
+      let selectData = this.$refs.basicTable.multipleSelection;
+      this.$confirm('此操作将删除所有选中数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        if(Array.isArray(selectData)&&selectData.length!==0){
+            this.$message({
+              type: 'success',
+              message: '删除成功'
+            });
+        }else{
+            this.$message({
+              type: 'info',
+              message: '请勾选数据再删除'
+            });
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     }
   },
 }
 </script>
 
 <style scoped>
-
+  #complete-pagination{
+    text-align: center;
+    margin-top: 20px;
+  }
+  .box-card {
+    align-items : center;
+    margin: 20px;
+  }
 </style>

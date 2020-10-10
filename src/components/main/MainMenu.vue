@@ -11,18 +11,15 @@
           <i class="el-icon-menu"></i>
           <span slot="title">主页</span>
         </el-menu-item>
-        <el-submenu index="1" title="内部管理">
+        <el-submenu index="1">
           <template slot="title">
             <slot>
               <i class="el-icon-location"></i>
               <span>内部管理</span>
             </slot>
           </template>
-          <el-menu-item-group>
-            <span></span>
-            <el-menu-item index="/staff">员工管理</el-menu-item>
-            <!--<el-menu-item index="1-2">选项2</el-menu-item>-->
-          </el-menu-item-group>
+          <el-menu-item index="/staff">员工管理</el-menu-item>
+<!--            <el-menu-item index="1-2">选项2</el-menu-item>-->
         </el-submenu>
 
       </el-menu>
@@ -46,4 +43,7 @@ export default {
  .el-submenu__title{
    padding-left: 0;
  }
+  .el-submenu > .el-menu-item{
+    padding-left: 60px!important;
+  }
 </style>
