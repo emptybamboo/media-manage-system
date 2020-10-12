@@ -39,7 +39,7 @@ export default {
     }
   },
   watch:{
-    "tableDataArr.list" : {
+    "tableDataArr.data" : {
       handler(newVal,oldVal){
         if(newVal){
           // setTimeout(()=>{

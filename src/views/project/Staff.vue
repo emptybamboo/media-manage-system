@@ -40,24 +40,10 @@
             </template>
           </el-table-column>
           <el-table-column
-              label="年龄"
-          >
-            <template slot-scope="scope">
-              <p>{{ scope.row.age }}</p>
-            </template>
-          </el-table-column>
-          <el-table-column
               label="性别"
           >
             <template slot-scope="scope">
-              <p>{{ scope.row.gender===false?"男":"女" }}</p>
-            </template>
-          </el-table-column>
-          <el-table-column
-              label="手机号代码"
-          >
-            <template slot-scope="scope">
-              <p>{{ scope.row.phone }}</p>
+              <p>{{ scope.row.gender===0?"男":"女" }}</p>
             </template>
           </el-table-column>
         </basic-table>
@@ -76,7 +62,7 @@
                  :form-title="formTitle"
     >
       <!--使用slot插入弹出层的表单-->
-      <el-form :model="form"  :label-position="labelPosition" ref="staffForm">
+      <el-form :model="form" :label-position="labelPosition" ref="staffForm">
         <el-form-item label="日期" :label-width="formLabelWidth">
           <el-date-picker
               v-model="form.time"
@@ -88,17 +74,11 @@
         <el-form-item label="姓名" :label-width="formLabelWidth">
           <el-input v-model="form.name" clearable></el-input>
         </el-form-item>
-        <el-form-item label="年龄" :label-width="formLabelWidth">
-          <el-input v-model="form.age" clearable></el-input>
-        </el-form-item>
         <el-form-item label="性别" :label-width="formLabelWidth">
           <el-radio-group v-model="form.gender" >
-              <el-radio :label="false">男</el-radio>
-              <el-radio :label="true">女</el-radio>
+              <el-radio :label="0">男</el-radio>
+              <el-radio :label="1">女</el-radio>
           </el-radio-group>
-        </el-form-item>
-        <el-form-item label="手机号" :label-width="formLabelWidth">
-          <el-input v-model="form.phone" clearable></el-input>
         </el-form-item>
       </el-form>
     </form-dialog>
@@ -128,50 +108,49 @@ export default {
       //新增编辑弹窗属性
       form: {
         name: '',
-        age: '',
         time: '',
         gender: false,
-        phone: '',
       },
       formLabelWidth: '80px',
       formTitle : "",
       labelPosition : 'right',//dialog中每一行的对齐方式
     }
   },
-  mounted(){
-
+  created(){
+    console.log("created开始前");
     //上下两个url必须一致,这样将来只需要删掉mock代码即可
     this.$axios.request({
-      'method' : 'get',
-      'url' : 'http://lzc.com/staff',
+      'method' : 'post',
+      'url' : 'http://localhost:8181/staff',
     }).then(res => {
       console.log(res.data);
       console.log("mock生成数据类型->"+typeof res.data);
       console.log("mock生成数据↓");
       console.log(res.data);
-      console.log("mock生成数据.list↓");
-      console.log(res.data.list);
+      console.log("mock生成数据.data↓");
+      console.log(res.data.data);
       this.tableData = res.data;//传送表格数据
-      this.paginationData.totalNum = res.data.list.length;//传送当前数组总条数
+      this.paginationData.totalNum = res.data.data.length;//传送当前数组总条数
       this.currentPageTableData = {
-        list : res.data.list.slice(
+        data : res.data.data.slice(
             (this.paginationData.currentPage-1)*this.paginationData.pageSize,
             this.paginationData.currentPage*this.paginationData.pageSize
         )//根据页码分割表格数据再传送
       };
-      console.log("当前页面表格数据.list↓");
+      console.log("当前页面表格数据.data↓");
       console.log(this.currentPageTableData);
+    }).catch(res=>{
+      console.log(res);
     });
 
     const Random = this.$Mock.Random;
-    const data = this.$Mock.mock('http://lzc.com/staff',{
-      'list|100-200' : [
+    const data = this.$Mock.mock('http://localhost:8181/staff',{
+      'data|100-200' : [
         {
           'id|+1' : 1,
           "name" : "@cname",
-          "phone" : ()=>Random.string(11),
-          "age|1-100" : 100,
-          "gender" : "@boolean",
+          // "phone" : ()=>Random.string(11),
+          "gender|0-1" : 1,
           "time" : "@date('yyyy-MM-dd')",
         }
       ]
@@ -247,14 +226,14 @@ export default {
     //切换页码
     changeCurrentPage(page){
       console.log("切换页码");
-      console.log(this.tableData.list);
+      console.log(this.tableData.data);
       this.paginationData.currentPage = page;//把传递过来的页码值赋给主组件的页码值
-      // this.currentPageTableData.list = this.tableData.list.slice(
+      // this.currentPageTableData.data = this.tableData.data.slice(
       //     (this.paginationData.currentPage-1)*this.paginationData.pageSize,
       //     this.paginationData.currentPage*this.paginationData.pageSize
       // );//根据页码分割表格数据
       this.changeTable();//重新改变页面表格风闸UN改成了这个方法
-      console.log(this.tableData.list);
+      console.log(this.tableData.data);
     },
     //切换每页显示条数
     changePageSize(size){
@@ -268,7 +247,7 @@ export default {
     },
     //重新规整当前页面显示数据
     changeTable(){
-      this.currentPageTableData.list = this.tableData.list.slice(
+      this.currentPageTableData.data = this.tableData.data.slice(
           (this.paginationData.currentPage-1)*this.paginationData.pageSize,
           this.paginationData.currentPage*this.paginationData.pageSize
       );//根据页码分割表格数据
