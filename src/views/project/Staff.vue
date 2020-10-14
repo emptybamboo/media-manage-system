@@ -24,7 +24,7 @@
           >
             <template slot-scope="scope">
               <i class="el-icon-time"></i>
-              <span style="margin-left: 10px">{{ scope.row.time }}</span>
+              <span style="margin-left: 10px">{{ scope.row.time}}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -66,9 +66,9 @@
         <el-form-item label="日期" :label-width="formLabelWidth">
           <el-date-picker
               v-model="form.time"
-              type="date"
+              type="datetime"
               style="width: 100%"
-              placeholder="选择日期">
+              placeholder="选择日期时间">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="姓名" :label-width="formLabelWidth">
@@ -89,6 +89,7 @@
 import BasicTable from "../../components/main/table/BasicTable";
 import CompletePagination from "../../components/main/pagination/CompletePagination";
 import FormDialog from "../../components/main/dialog/FormDialog";
+import dateFilter from "../../../util/js/dateFilter";
 
 export default {
   name: "Staff",
@@ -120,7 +121,7 @@ export default {
     console.log("created开始前");
     //上下两个url必须一致,这样将来只需要删掉mock代码即可
     this.$axios.request({
-      'method' : 'post',
+      'method' : 'get',
       'url' : 'http://localhost:8181/staff',
     }).then(res => {
       console.log(res.data);
@@ -129,10 +130,32 @@ export default {
       console.log(res.data);
       console.log("mock生成数据.data↓");
       console.log(res.data.data);
-      this.tableData = res.data;//传送表格数据
-      this.paginationData.totalNum = res.data.data.length;//传送当前数组总条数
+      console.log(typeof this.$dateFunction.dateFilter());
+      console.log(this.$dateFunction.dateFilter());
+      //新建数组装所有数据
+      let transferData = [];
+      //转换时间戳为时间格式
+      for(let getData of res.data.data){
+        getData.time = this.$dateFunction.dateFilter(getData.time*1000);
+        transferData.push(getData);
+      }
+      //数组塞进对象
+      let transferDataObj = {
+        data : transferData
+      };
+
+      // this.tableData = res.data;//传送表格数据
+      // this.paginationData.totalNum = res.data.data.length;//传送当前数组总条数
+      // this.currentPageTableData = {
+      //   data : res.data.data.slice(
+      //       (this.paginationData.currentPage-1)*this.paginationData.pageSize,
+      //       this.paginationData.currentPage*this.paginationData.pageSize
+      //   )//根据页码分割表格数据再传送
+      // };
+      this.tableData = transferDataObj;//传送表格数据
+      this.paginationData.totalNum = transferDataObj.data.length;//传送当前数组总条数
       this.currentPageTableData = {
-        data : res.data.data.slice(
+        data : transferDataObj.data.slice(
             (this.paginationData.currentPage-1)*this.paginationData.pageSize,
             this.paginationData.currentPage*this.paginationData.pageSize
         )//根据页码分割表格数据再传送
@@ -143,18 +166,26 @@ export default {
       console.log(res);
     });
 
-    const Random = this.$Mock.Random;
-    const data = this.$Mock.mock('http://localhost:8181/staff',{
-      'data|100-200' : [
-        {
-          'id|+1' : 1,
-          "name" : "@cname",
-          // "phone" : ()=>Random.string(11),
-          "gender|0-1" : 1,
-          "time" : "@date('yyyy-MM-dd')",
-        }
-      ]
+
+    this.$axios.request({
+      'method' : 'post',
+      'url' : 'http://localhost:8181/staff',
+    }).then(res=>{
+      console.log("insert触发post接口");
+      console.log(res);
     });
+    // const Random = this.$Mock.Random;
+    // const data = this.$Mock.mock('http://localhost:8181/staff',{
+    //   'data|100-200' : [
+    //     {
+    //       'id|+1' : 1,
+    //       "name" : "@cname",
+    //       // "phone" : ()=>Random.string(11),
+    //       "gender|0-1" : 1,
+    //       "time" : "@date('yyyy-MM-dd')",
+    //     }
+    //   ]
+    // });
 
   },
   components : {
@@ -278,6 +309,11 @@ export default {
           message: '已取消删除'
         });
       });
+    },
+    //时间戳转换为格式化事件
+    time(time = +new Date()) {
+      let date = new Date(time + 8 * 3600 * 1000);
+      return date.toJSON().substr(0, 19).replace('T', ' ').replace(/-/g, '.');
     }
   },
 }

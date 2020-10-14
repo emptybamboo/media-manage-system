@@ -10,11 +10,16 @@ import './assets/css/flex.css';
 import './assets/css/basic.css';
 import axios from 'axios'
 import Mock from 'mockjs'
+import  * as custom from '../util/js/dateFilter'
+
 
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.prototype.$axios = axios
 Vue.prototype.$Mock = Mock
+// Object.keys(custom).forEach(key => { Vue.filter(key, custom[key])})
+Vue.prototype.$dateFunction = custom;
+
 
 new Vue({
   router,
