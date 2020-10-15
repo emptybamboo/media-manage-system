@@ -11,15 +11,16 @@ import './assets/css/basic.css';
 import axios from 'axios'
 import Mock from 'mockjs'
 import  * as custom from '../util/js/dateFilter'
-
+import Qs from 'qs'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.prototype.$axios = axios
 Vue.prototype.$Mock = Mock
+Vue.prototype.$Qs = Qs
 // Object.keys(custom).forEach(key => { Vue.filter(key, custom[key])})
 Vue.prototype.$dateFunction = custom;
-
+axios.defaults.baseURL = "http://localhost:8181";
 
 new Vue({
   router,

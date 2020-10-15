@@ -122,7 +122,7 @@ export default {
     //上下两个url必须一致,这样将来只需要删掉mock代码即可
     this.$axios.request({
       'method' : 'get',
-      'url' : 'http://localhost:8181/staff',
+      'url' : '/staff',
     }).then(res => {
       console.log(res.data);
       console.log("mock生成数据类型->"+typeof res.data);
@@ -167,13 +167,15 @@ export default {
     });
 
 
-    this.$axios.request({
-      'method' : 'post',
-      'url' : 'http://localhost:8181/staff',
-    }).then(res=>{
-      console.log("insert触发post接口");
-      console.log(res);
-    });
+    // this.$axios.request({
+    //   'method' : 'post',
+    //   'url' : 'http://localhost:8181/staff',
+    // }).then(res=>{
+    //   console.log("insert触发post接口");
+    //   console.log(res);
+    //   console.log(res.data);
+    //   console.log(res.data.message);
+    // });
     // const Random = this.$Mock.Random;
     // const data = this.$Mock.mock('http://localhost:8181/staff',{
     //   'data|100-200' : [
@@ -223,6 +225,32 @@ export default {
       }else{//否则是新增
         console.log("dialog新增数据");
         console.log(this.form);
+        console.log(new Date(this.form.time).getTime());
+        console.log(typeof new Date(this.form.time).getTime());
+        this.form.time = new Date(this.form.time).getTime()/1000;
+        this.$axios.request({
+          'method' : 'post',
+          'data' : this.$Qs.stringify(this.form),
+          'url' : '/staff',
+        }).then(res=>{
+          console.log("insert触发post接口");
+          console.log(res.data);
+          this.$message({
+            type: 'success',
+            message: res.data.message
+          });
+        }).catch(res => {
+          console.log("异步新增员工失败");
+          console.log(this.form);
+          console.log(res);
+          console.log(this.form.time);
+          console.log(typeof this.form.time);
+          console.log(this.form.time.setTime());
+          this.$message({
+            type: 'error',
+            message: "异步新增员工失败"+res.message,
+          });
+        });
       }
     },
     tableEdit(index,row){
@@ -310,11 +338,7 @@ export default {
         });
       });
     },
-    //时间戳转换为格式化事件
-    time(time = +new Date()) {
-      let date = new Date(time + 8 * 3600 * 1000);
-      return date.toJSON().substr(0, 19).replace('T', ' ').replace(/-/g, '.');
-    }
+
   },
 }
 </script>
