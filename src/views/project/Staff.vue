@@ -19,14 +19,14 @@
               type="selection"
               width="55">
           </el-table-column>
-          <el-table-column
-              label="日期"
-          >
-            <template slot-scope="scope">
-              <i class="el-icon-time"></i>
-              <span style="margin-left: 10px">{{ scope.row.time}}</span>
-            </template>
-          </el-table-column>
+<!--          <el-table-column-->
+<!--              label="日期"-->
+<!--          >-->
+<!--            <template slot-scope="scope">-->
+<!--              <i class="el-icon-time"></i>-->
+<!--              <span style="margin-left: 10px">{{ scope.row.time}}</span>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
           <el-table-column
               label="姓名"
           >
@@ -46,6 +46,20 @@
               <p>{{ scope.row.gender===0?"男":"女" }}</p>
             </template>
           </el-table-column>
+          <el-table-column
+              label="电话号码"
+          >
+            <template slot-scope="scope">
+              <span>{{ scope.row.phone}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+              label="用户名"
+          >
+            <template slot-scope="scope">
+              <span>{{ scope.row.userName}}</span>
+            </template>
+          </el-table-column>
         </basic-table>
         <complete-pagination
             :pagination-data="paginationData"
@@ -63,22 +77,31 @@
     >
       <!--使用slot插入弹出层的表单-->
       <el-form :model="form" :label-position="labelPosition" ref="staffForm">
-        <el-form-item label="日期" :label-width="formLabelWidth">
-          <el-date-picker
-              v-model="form.time"
-              type="datetime"
-              style="width: 100%"
-              placeholder="选择日期时间">
-          </el-date-picker>
-        </el-form-item>
+<!--        <el-form-item label="日期" :label-width="formLabelWidth">-->
+<!--          <el-date-picker-->
+<!--              v-model="form.time"-->
+<!--              type="datetime"-->
+<!--              style="width: 100%"-->
+<!--              placeholder="选择日期时间">-->
+<!--          </el-date-picker>-->
+<!--        </el-form-item>-->
         <el-form-item label="姓名" :label-width="formLabelWidth">
           <el-input v-model="form.name" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="电话号码" :label-width="formLabelWidth">
+          <el-input v-model="form.phone" clearable></el-input>
         </el-form-item>
         <el-form-item label="性别" :label-width="formLabelWidth">
           <el-radio-group v-model="form.gender" >
               <el-radio :label="0">男</el-radio>
               <el-radio :label="1">女</el-radio>
           </el-radio-group>
+        </el-form-item>
+        <el-form-item label="用户名" :label-width="formLabelWidth">
+          <el-input v-model="form.userName" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="密码" :label-width="formLabelWidth">
+          <el-input v-model="form.password" clearable></el-input>
         </el-form-item>
       </el-form>
     </form-dialog>
@@ -109,7 +132,10 @@ export default {
       //新增编辑弹窗属性
       form: {
         name: '',
-        time: '',
+        // time: '',
+        phone: '',
+        userName: '',
+        password: '',
         gender: false,
       },
       formLabelWidth: '80px',
@@ -120,53 +146,53 @@ export default {
   created(){
     console.log("created开始前");
     //上下两个url必须一致,这样将来只需要删掉mock代码即可
-    this.$axios.request({
-      'method' : 'get',
-      'url' : '/staff',
-    }).then(res => {
-      console.log(res.data);
-      console.log("mock生成数据类型->"+typeof res.data);
-      console.log("mock生成数据↓");
-      console.log(res.data);
-      console.log("mock生成数据.data↓");
-      console.log(res.data.data);
-      console.log(typeof this.$dateFunction.dateFilter());
-      console.log(this.$dateFunction.dateFilter());
-      //新建数组装所有数据
-      let transferData = [];
-      //转换时间戳为时间格式
-      for(let getData of res.data.data){
-        getData.time = this.$dateFunction.dateFilter(getData.time*1000);
-        transferData.push(getData);
-      }
-      //数组塞进对象
-      let transferDataObj = {
-        data : transferData
-      };
+    // this.$axios.request({
+    //   'method' : 'get',
+    //   'url' : '/staff',
+    // }).then(res => {
+    //   console.log(res.data);
+    //   console.log("mock生成数据类型->"+typeof res.data);
+    //   console.log("mock生成数据↓");
+    //   console.log(res.data);
+    //   console.log("mock生成数据.data↓");
+    //   console.log(res.data.data);
+    //   console.log(typeof this.$dateFunction.dateFilter());
+    //   console.log(this.$dateFunction.dateFilter());
+    //   //新建数组装所有数据
+    //   let transferData = [];
+    //   //转换时间戳为时间格式
+    //   for(let getData of res.data.data){
+    //     getData.time = this.$dateFunction.dateFilter(getData.time*1000);
+    //     transferData.push(getData);
+    //   }
+    //   //数组塞进对象
+    //   let transferDataObj = {
+    //     data : transferData
+    //   };
+    //
+    //   // this.tableData = res.data;//传送表格数据
+    //   // this.paginationData.totalNum = res.data.data.length;//传送当前数组总条数
+    //   // this.currentPageTableData = {
+    //   //   data : res.data.data.slice(
+    //   //       (this.paginationData.currentPage-1)*this.paginationData.pageSize,
+    //   //       this.paginationData.currentPage*this.paginationData.pageSize
+    //   //   )//根据页码分割表格数据再传送
+    //   // };
+    //   this.tableData = transferDataObj;//传送表格数据
+    //   this.paginationData.totalNum = transferDataObj.data.length;//传送当前数组总条数
+    //   this.currentPageTableData = {
+    //     data : transferDataObj.data.slice(
+    //         (this.paginationData.currentPage-1)*this.paginationData.pageSize,
+    //         this.paginationData.currentPage*this.paginationData.pageSize
+    //     )//根据页码分割表格数据再传送
+    //   };
+    //   console.log("当前页面表格数据.data↓");
+    //   console.log(this.currentPageTableData);
+    // }).catch(res=>{
+    //   console.log(res);
+    // });
 
-      // this.tableData = res.data;//传送表格数据
-      // this.paginationData.totalNum = res.data.data.length;//传送当前数组总条数
-      // this.currentPageTableData = {
-      //   data : res.data.data.slice(
-      //       (this.paginationData.currentPage-1)*this.paginationData.pageSize,
-      //       this.paginationData.currentPage*this.paginationData.pageSize
-      //   )//根据页码分割表格数据再传送
-      // };
-      this.tableData = transferDataObj;//传送表格数据
-      this.paginationData.totalNum = transferDataObj.data.length;//传送当前数组总条数
-      this.currentPageTableData = {
-        data : transferDataObj.data.slice(
-            (this.paginationData.currentPage-1)*this.paginationData.pageSize,
-            this.paginationData.currentPage*this.paginationData.pageSize
-        )//根据页码分割表格数据再传送
-      };
-      console.log("当前页面表格数据.data↓");
-      console.log(this.currentPageTableData);
-    }).catch(res=>{
-      console.log(res);
-    });
-
-
+    this.getAllList();
     // this.$axios.request({
     //   'method' : 'post',
     //   'url' : 'http://localhost:8181/staff',
@@ -218,19 +244,53 @@ export default {
       this.dialogStatus.show = false;
       console.log(this.dialogStatus.show);
       console.log("↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑");
+
       //如果当前表单属性中存在id说明是编辑
       if('id' in this.form){
         console.log("dialog编辑数据");
         console.log(this.form);
+        if(typeof this.form.time === 'string'){
+          this.form.time = new Date(this.form.time).getTime()/1000;
+        }
+        this.$axios.request({
+          'method' : 'put',
+          // 'data' : this.$Qs.stringify(this.form),
+          'data' : this.form,
+          'url' : '/staff/'+this.form.id,
+        }).then(res=>{
+          console.log("put触发put接口");
+          console.log(res.data);
+          if(parseInt(res.data.code)>199&&parseInt(res.data.code)<400){
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            });
+          }else{
+            this.$message({
+              type: 'error',
+              message: res.data.message
+            });
+          }
+        }).catch(res => {
+          console.log("异步更新员工失败");
+          this.$message({
+            type: 'error',
+            message: "异步更新员工失败"+res.message,
+          });
+        }).then(res => {
+          this.getAllList();
+        });
+
       }else{//否则是新增
         console.log("dialog新增数据");
         console.log(this.form);
         console.log(new Date(this.form.time).getTime());
         console.log(typeof new Date(this.form.time).getTime());
-        this.form.time = new Date(this.form.time).getTime()/1000;
+        // this.form.time = new Date(this.form.time).getTime()/1000;
         this.$axios.request({
           'method' : 'post',
-          'data' : this.$Qs.stringify(this.form),
+          // 'data' : this.$Qs.stringify(this.form),
+          'data' : this.form,
           'url' : '/staff',
         }).then(res=>{
           console.log("insert触发post接口");
@@ -245,11 +305,12 @@ export default {
           console.log(res);
           console.log(this.form.time);
           console.log(typeof this.form.time);
-          console.log(this.form.time.setTime());
           this.$message({
             type: 'error',
             message: "异步新增员工失败"+res.message,
           });
+        }).then(res=>{
+          this.getAllList();
         });
       }
     },
@@ -260,6 +321,8 @@ export default {
       console.log(row);
       this.formTitle = "编辑员工";
       //先把当前行数据代入弹出层数据form中再打开
+      //带入前把密码清空,因为是md5格式
+      row.password = '';
       this.form = row;
       this.dialogStatus.show = true;
 
@@ -271,10 +334,28 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+
+
+
+        this.$axios.request({
+          'method' : 'delete',
+          'url' : '/staff/'+row.id,
+        }).then(res=>{
+          console.log("delete触发delete接口");
+          console.log(res.data);
           this.$message({
             type: 'success',
-            message: '删除成功'
+            message: res.data.message
           });
+        }).catch(res => {
+          console.log("异步删除员工失败");
+          this.$message({
+            type: 'error',
+            message: "异步删除员工失败"+res.message,
+          });
+        }).then(res=>{
+          this.getAllList();
+        });
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -287,10 +368,7 @@ export default {
       console.log("切换页码");
       console.log(this.tableData.data);
       this.paginationData.currentPage = page;//把传递过来的页码值赋给主组件的页码值
-      // this.currentPageTableData.data = this.tableData.data.slice(
-      //     (this.paginationData.currentPage-1)*this.paginationData.pageSize,
-      //     this.paginationData.currentPage*this.paginationData.pageSize
-      // );//根据页码分割表格数据
+
       this.changeTable();//重新改变页面表格风闸UN改成了这个方法
       console.log(this.tableData.data);
     },
@@ -321,10 +399,40 @@ export default {
         type: 'warning'
       }).then(() => {
         if(Array.isArray(selectData)&&selectData.length!==0){
+          console.log("删除所有");
+          console.log(selectData);
+          let deleteList = [];
+          for(let select of selectData){
+            console.log("循环");
+            console.log(select);
+              select.time = new Date(select.time).getTime()/1000;
+              deleteList.push(select);
+          }
+          console.log(deleteList);
+          this.$axios.request({
+            'method' : 'post',
+            'data' : selectData,
+            // 'data' : this.$Qs.stringify(deleteList),
+            'url' : '/staff/deleteAll',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+          }).then(res=>{
+            console.log("delete触发delete接口");
+            console.log(res.data);
             this.$message({
               type: 'success',
-              message: '删除成功'
+              message: res.data.message
             });
+          }).catch(res => {
+            console.log("异步删除员工失败");
+            this.$message({
+              type: 'error',
+              message: "异步删除员工失败"+res.message,
+            });
+          }).then(res=>{
+            this.getAllList();
+          });
         }else{
             this.$message({
               type: 'info',
@@ -338,7 +446,53 @@ export default {
         });
       });
     },
+  getAllList(){
+    this.$axios.request({
+      'method' : 'get',
+      'url' : '/staff',
+    }).then(res => {
+      console.log(res.data);
+      console.log("mock生成数据类型->"+typeof res.data);
+      console.log("mock生成数据↓");
+      console.log(res.data);
+      console.log("mock生成数据.data↓");
+      console.log(res.data.data);
+      console.log(typeof this.$dateFunction.dateFilter());
+      console.log(this.$dateFunction.dateFilter());
+      //新建数组装所有数据
+      let transferData = [];
+      //转换时间戳为时间格式
+      for(let getData of res.data.data){
+        getData.time = this.$dateFunction.dateFilter(getData.time*1000);
+        transferData.push(getData);
+      }
+      //数组塞进对象
+      let transferDataObj = {
+        data : transferData
+      };
 
+      // this.tableData = res.data;//传送表格数据
+      // this.paginationData.totalNum = res.data.data.length;//传送当前数组总条数
+      // this.currentPageTableData = {
+      //   data : res.data.data.slice(
+      //       (this.paginationData.currentPage-1)*this.paginationData.pageSize,
+      //       this.paginationData.currentPage*this.paginationData.pageSize
+      //   )//根据页码分割表格数据再传送
+      // };
+      this.tableData = transferDataObj;//传送表格数据
+      this.paginationData.totalNum = transferDataObj.data.length;//传送当前数组总条数
+      this.currentPageTableData = {
+        data : transferDataObj.data.slice(
+            (this.paginationData.currentPage-1)*this.paginationData.pageSize,
+            this.paginationData.currentPage*this.paginationData.pageSize
+        )//根据页码分割表格数据再传送
+      };
+      console.log("当前页面表格数据.data↓");
+      console.log(this.currentPageTableData);
+    }).catch(res=>{
+      console.log(res);
+    });
+  }
   },
 }
 </script>
