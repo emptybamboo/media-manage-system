@@ -31,3 +31,11 @@
     height: 60px;
     background-color: #B3C0D1;
 }
+/*flex列居中*/
+.flex-col-center{
+    align-items: center;
+}
+/*flex行居中*/
+.flex-row-center{
+    justify-content: center;
+}
