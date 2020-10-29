@@ -14,14 +14,18 @@ const routes = [
     component: () => import('../views/About.vue')
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: () => import('@/views/Login.vue')
+    path: '/enter',
+    component: () => import('@/views/enter/Enter.vue'),
+    children : [
+      {
+        path : "/",
+        component: () => import('@/views/enter/Login.vue')
+      },
+    ]
   },
   //所有后台页面的路由
   {
     path: '/',
-    name: 'Backstage',
     component: () => import('@/views/Backstage.vue'),
     children : [
       {
