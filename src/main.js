@@ -8,19 +8,21 @@ import './assets/css/border.css';
 import './assets/css/reset.css';
 import './assets/css/flex.css';
 import './assets/css/basic.css';
-import axios from 'axios'
+import AXIOS from 'axios'
 import Mock from 'mockjs'
 import  * as custom from '../util/js/dateFilter'
 import Qs from 'qs'
+import axios from './api/api.js'   //引入axios文件夹
 
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.prototype.$axios = axios
+Vue.prototype.$AXIOS = AXIOS
 Vue.prototype.$Mock = Mock
 Vue.prototype.$Qs = Qs
 // Object.keys(custom).forEach(key => { Vue.filter(key, custom[key])})
 Vue.prototype.$dateFunction = custom;
-axios.defaults.baseURL = "http://localhost:8181";
+// axios.defaults.baseURL = "http://localhost:8181";
 
 new Vue({
   router,

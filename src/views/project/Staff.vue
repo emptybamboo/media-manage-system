@@ -252,12 +252,14 @@ export default {
         if(typeof this.form.time === 'string'){
           this.form.time = new Date(this.form.time).getTime()/1000;
         }
-        this.$axios.request({
-          'method' : 'put',
-          // 'data' : this.$Qs.stringify(this.form),
-          'data' : this.form,
-          'url' : '/staff/'+this.form.id,
-        }).then(res=>{
+        // this.$axios.request({
+        //   'method' : 'put',
+        //   // 'data' : this.$Qs.stringify(this.form),
+        //   'data' : this.form,
+        //   'url' : '/staff/'+this.form.id,
+        // })
+        this.$axios.put('/staff/'+this.form.id)
+            .then(res=>{
           console.log("put触发put接口");
           console.log(res.data);
           if(parseInt(res.data.code)>199&&parseInt(res.data.code)<400){
@@ -287,12 +289,13 @@ export default {
         console.log(new Date(this.form.time).getTime());
         console.log(typeof new Date(this.form.time).getTime());
         // this.form.time = new Date(this.form.time).getTime()/1000;
-        this.$axios.request({
-          'method' : 'post',
-          // 'data' : this.$Qs.stringify(this.form),
-          'data' : this.form,
-          'url' : '/staff',
-        }).then(res=>{
+        // this.$axios.request({
+        //   'method' : 'post',
+        //   // 'data' : this.$Qs.stringify(this.form),
+        //   'data' : this.form,
+        //   'url' : '/staff',
+        // })
+        this.$axios.post('/staff',this.$Qs.stringify(this.form)).then(res=>{
           console.log("insert触发post接口");
           console.log(res.data);
           this.$message({
@@ -337,10 +340,11 @@ export default {
 
 
 
-        this.$axios.request({
-          'method' : 'delete',
-          'url' : '/staff/'+row.id,
-        }).then(res=>{
+        // this.$axios.request({
+        //   'method' : 'delete',
+        //   'url' : '/staff/'+row.id,
+        // })
+        this.$axios.get('/staff/'+row.id).then(res=>{
           console.log("delete触发delete接口");
           console.log(res.data);
           this.$message({
@@ -409,15 +413,16 @@ export default {
               deleteList.push(select);
           }
           console.log(deleteList);
-          this.$axios.request({
-            'method' : 'post',
-            'data' : selectData,
-            // 'data' : this.$Qs.stringify(deleteList),
-            'url' : '/staff/deleteAll',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-          }).then(res=>{
+          // this.$axios.request({
+          //   'method' : 'post',
+          //   'data' : selectData,
+          //   // 'data' : this.$Qs.stringify(deleteList),
+          //   'url' : '/staff/deleteAll',
+          //   headers: {
+          //     'Content-Type': 'application/json'
+          //   },
+          // })
+          this.$axios.post('/staff/deleteAll',selectData).then(res=>{
             console.log("delete触发delete接口");
             console.log(res.data);
             this.$message({
@@ -447,10 +452,11 @@ export default {
       });
     },
   getAllList(){
-    this.$axios.request({
-      'method' : 'get',
-      'url' : '/staff',
-    }).then(res => {
+    // this.$axios.request({
+    //   'method' : 'get',
+    //   'url' : '/staff',
+    // })
+    this.$axios.get('/staff').then(res => {
       console.log(res.data);
       console.log("mock生成数据类型->"+typeof res.data);
       console.log("mock生成数据↓");
@@ -462,7 +468,7 @@ export default {
       //新建数组装所有数据
       let transferData = [];
       //转换时间戳为时间格式
-      for(let getData of res.data.data){
+      for(let getData of res.data){
         getData.time = this.$dateFunction.dateFilter(getData.time*1000);
         transferData.push(getData);
       }

@@ -46,4 +46,32 @@ const router = new VueRouter({
   routes
 })
 
+//全局前置钩子
+//模拟登陆,正式使用应该是先去异步取
+
+
+//前置全局路由守卫
+router.beforeEach((to,from,next)=>{
+  let flag = localStorage.token;
+  console.log("进入beforeEach");
+  console.log(localStorage.token);
+  console.log(to);
+  console.log(to.name);
+  console.log(from);
+  console.log(flag);
+  if(flag){
+    if(to.path==='/enter'){
+      next('/');
+    }else{
+      next();
+    }
+  }else{
+    if(to.path==='/enter'){
+      next();
+    }else{
+      next("/enter");
+    }
+  }
+})
+
 export default router
