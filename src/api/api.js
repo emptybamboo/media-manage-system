@@ -146,17 +146,24 @@ export default {
         });
     },
     put(url, params) {
+        console.log("put接口");
+        console.log(params);
+        // params = qs.stringify(params);
         return axios({
             method: "put",
             url,
             data: params,
+            // params,
             headers: { 'token': localStorage.token },
         }).then(response => {
             return checkStatus(response);
         });
     },
     delete(url, params) {
+        console.log("delete接口");
+        console.log(params);
         params = qs.stringify(params);
+        console.log(params);
         return axios({
             method: "delete",
             url,

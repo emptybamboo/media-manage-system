@@ -258,19 +258,20 @@ export default {
         //   'data' : this.form,
         //   'url' : '/staff/'+this.form.id,
         // })
-        this.$axios.put('/staff/'+this.form.id)
+        this.$axios.put('/staff/'+this.form.id,this.form)
             .then(res=>{
           console.log("put触发put接口");
+          console.log(res);
           console.log(res.data);
-          if(parseInt(res.data.code)>199&&parseInt(res.data.code)<400){
+          if(parseInt(res.code)>199&&parseInt(res.code)<400){
             this.$message({
               type: 'success',
-              message: res.data.message
+              message: res.message
             });
           }else{
             this.$message({
               type: 'error',
-              message: res.data.message
+              message: res.message
             });
           }
         }).catch(res => {
@@ -295,12 +296,13 @@ export default {
         //   'data' : this.form,
         //   'url' : '/staff',
         // })
-        this.$axios.post('/staff',this.$Qs.stringify(this.form)).then(res=>{
+        this.$axios.post('/staff',this.form).then(res=>{
           console.log("insert触发post接口");
           console.log(res.data);
+          console.log(res);
           this.$message({
             type: 'success',
-            message: res.data.message
+            message: res.message
           });
         }).catch(res => {
           console.log("异步新增员工失败");
@@ -344,12 +346,12 @@ export default {
         //   'method' : 'delete',
         //   'url' : '/staff/'+row.id,
         // })
-        this.$axios.get('/staff/'+row.id).then(res=>{
+        this.$axios.delete('/staff/'+row.id).then(res=>{
           console.log("delete触发delete接口");
           console.log(res.data);
           this.$message({
             type: 'success',
-            message: res.data.message
+            message: res.message
           });
         }).catch(res => {
           console.log("异步删除员工失败");
@@ -427,7 +429,7 @@ export default {
             console.log(res.data);
             this.$message({
               type: 'success',
-              message: res.data.message
+              message: res.message
             });
           }).catch(res => {
             console.log("异步删除员工失败");
@@ -462,7 +464,7 @@ export default {
       console.log("mock生成数据↓");
       console.log(res.data);
       console.log("mock生成数据.data↓");
-      console.log(res.data.data);
+      console.log(res.data);
       console.log(typeof this.$dateFunction.dateFilter());
       console.log(this.$dateFunction.dateFilter());
       //新建数组装所有数据
