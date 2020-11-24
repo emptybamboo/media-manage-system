@@ -1,34 +1,32 @@
 <template>
-  <div id="login" class="flex-simple flex-column flex-row-center">
+  <div id="register"  class="flex-simple flex-column flex-row-center">
     <div class="flex-simple flex-column flex-row-center flex-col-center">
-      <div class="padding-little">后台管理系统登录</div>
+      <div class="padding-little">后台管理系统注册</div>
       <el-input v-model="user.userName" placeholder="账户" class="padding-little"></el-input>
       <el-input placeholder="密码" v-model="user.password" show-password  class="padding-little"></el-input>
     </div>
     <div id="login-button" class="flex-simple flex-column flex-row-center flex-col-center padding-little">
-      <el-button type="success" @click="login">登录</el-button>
+      <el-button type="success" @click="register">注册</el-button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Login",
+  name: "Register",
   data(){
     return {
       user : {
-        name : '',
-        gender : false,
         userName : '',
         password : '',
       }
     }
   },
   methods : {
-    login(){
-      // this.$axios.post('/login',this.$Qs.stringify(this.user)).then(res=>{
-      this.$axios.get('/login?userName='+this.user.userName+"&password="+this.user.password).then(res=>{
-        console.log("触发登录get接口");
+    register(){
+      console.log("注册");
+      this.$axios.post('/register',this.user).then(res=>{
+        console.log("触发注册post接口");
         console.log(res);
         console.log(res.data);
         console.log(localStorage);
@@ -43,11 +41,11 @@ export default {
         console.log(localStorage.token);
         this.$router.push('/');
       }).catch(res => {
-        console.log("登录失败");
+        console.log("注册失败");
         console.log(res);
         this.$message({
           type: 'error',
-          message: "登录失败",
+          message: "注册失败",
         });
       });
     }
@@ -59,5 +57,4 @@ export default {
 .el-input{
   width: 80%;
 }
-
 </style>

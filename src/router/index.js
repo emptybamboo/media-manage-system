@@ -21,6 +21,10 @@ const routes = [
         path : "/",
         component: () => import('@/views/enter/Login.vue')
       },
+      {
+        path : "register",
+        component: () => import('@/views/enter/Register.vue')
+      },
     ]
   },
   //所有后台页面的路由
@@ -66,7 +70,7 @@ router.beforeEach((to,from,next)=>{
       next();
     }
   }else{
-    if(to.path==='/enter'){
+    if(to.path==='/enter'||to.path==='/enter/register'){
       next();
     }else{
       next("/enter");
